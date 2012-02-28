@@ -46,12 +46,15 @@ class EntityClass:
     #----------------------------------------------------------
 
     def alias( self, m, s, a, px, r, c):
+	print 'in alias'
         if not s: s = g.current_subject
         if not a: print "error in " + s + ": alias empty."
         if a not in self.entities:
+	    print 'alias: ' + a
             self.entities[a] = []
             self.entities[a].append(['A', m,  a, s, [], r, c])
         if s not in self.entities:
+	    print 'alias: ' + s
             self.entities[s] = []
             self.entities[s].append(['a', '', s, a, [], r, c])
         return
@@ -67,7 +70,7 @@ class EntityClass:
 
     #----------------------------------------------------------
 
-    def remarks( self, m, s, p, px, r, c):
+    def restrictions( self, m, s, p, px, r, c):
         if not s: s = g.current_subject
         if s not in self.entities:
             self.entities[s] = [] 
@@ -75,7 +78,15 @@ class EntityClass:
         return
         
     #----------------------------------------------------------
+    def parentType( self, m, s, p, px, r, c):
+	if not s: s = g.current_subject
+	if s not in self.entities:
+		self.entities[s] = []
+	self.entities[s].append(["P", m, s, p, [], r, c])
+	return
 
+
+    #----------------------------------------------------------    
     def predicate( self, m, s, p, px, r, c):
         if not s: s = g.current_subject
         if s not in self.entities:
@@ -108,7 +119,7 @@ class EntityClass:
         next_line = ''
         next_line = factf.readline()         # set up first line.
         # print '1st line >' + next_line + '<'
-        # print 'subject is:', g.current_subject
+        print 'Subject: ', g.current_subject
     
         while len(next_line) > 0:
             afact = next_line[:-1]
@@ -123,7 +134,7 @@ class EntityClass:
                 next_line = factf.readline()
                 continue
 
-            # print 'working on >' + afact + '<'
+            print 'Current Fact: ' + afact
             if strip( afact ) == "": continue
 
             (m,s,p,px,r,c) = lex.breakup_fact( afact )
@@ -141,9 +152,10 @@ class EntityClass:
                 else:
                     s = s[2:]
 
-            if m == '#' or m == '#"':   # Then it is a remark
-                self.remarks( m, s, p, px, r, c )
-                continue
+            #if m == '#' or m == '#"':   # Then it is a remark
+             #   print 'm==# \n'
+	#	self.restrictions( m, s, p, px, r, c )
+         #       continue
 
             elif m ==  ':<':       # Then it is an include
                 # do the include thing
@@ -151,29 +163,38 @@ class EntityClass:
 
             elif len(m) and m[0] == ':' : #m[0] == ':':
                 # process the alias
+		#print 'process alias\n'
                 if p[:2] == '<-':    # normal alias definition
+		    #print 'normal alias\n'
                     a = strip( p[2:] )
                     self.alias( m, s, a, '', [], r, c )
                 elif p[:2] == '->':  # reverse alias definition
-                    a = s
+                    #print 'reverse alias\n'
+		    a = s
                     s = strip( p[2:] )
                     self.alias( m, a, s, [], r, c )
                 elif p[:1] == '[':   # type association
-                    te = find( p, ']' ) # end of type name
+	            te = find( p, ']' ) # end of type name
                     if te > 0:
                         t = strip(p[1:te])
                     else:
                         print 'Warning: Type has no ending ]\nin ', p
                         t = strip(p[1:])
-                    # print "Enter type", t
+                    print 'Type: ' + t
                     self.type( m, s, t, [], r, c )
+		elif p[:1] == '#':
+		    self.restrictions(m,s,p,px,r,c)
+		elif p[:2] == '>>':
+		    self.parentType(m,s,p,px,r,c)
                 elif m == ":[":       # entity citations
+		    #print 'citation\n'
                     ec = rfind( p, ']' )
                     if ec > 0: p = p[0:ec]
                     self.cits( m, s, '', [], r, p )
                 continue
 
             else:
+		#print 'm:'+str(m)+' s:'+str(s)+' p:'+str(p)+' px:'+str(px)+' '+str(r)+' '+str(c)
                 self.predicate( m, s, p, px, r, c )       
 
         return
@@ -207,7 +228,7 @@ class EntityClass:
         for i in self.entities[etag]:
             it = i[0]
             if   it == 'T': print indent2+"Type is", i[3], i[5]
-            elif it == 'R': print indent2+"#", i[5]
+            elif it == 'R': print indent2+"Has a Restriction:", i[5]
             elif it == 'A': print indent2+"Alias for", i[3], i[5]
             elif it == 'a': print indent2+"Alias for", i[3], i[5]
             elif it == 'C': print indent2+"Citations", i[6]
