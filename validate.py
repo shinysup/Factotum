@@ -1,14 +1,8 @@
 import os, sys, time, glob
 from getopt import *
 from string import *
-import factotum_lex
-import factotum_entities
-import factotum_relations
-import factotum_types
-import factotum_globals
 
 curType=''
-ent = factotum_entities.EntityClass()
 typeDict = {}
 subject=''
 type=''
@@ -84,8 +78,8 @@ def collectRelations():
 	entities=[]
 	currentEnt=''
 	currentTyp=''
-	for ty in typeDict.keys():
-		for e in typeDict[ty]['entity'].keys():
+	for ty in list(typeDict.keys()):
+		for e in list(typeDict[ty]['entity'].keys()):
 			entities.append(e)
 
 	for line in open('test.v').readlines():
@@ -102,7 +96,8 @@ def collectRelations():
 			if line:
 				if hasNumeric(line):
 					val = returnNumeric(line)
-					line=line.replace(val,'()')
+					for v in val:
+						line=line.replace(v,'()')
 					typeDict[currentTyp]['entity'][currentEnt]['parameters'][line]=val
 				else:
 					typeDict[currentTyp]['entity'][currentEnt]['relations'].append(line)
@@ -170,7 +165,7 @@ def validateNewFact():
 		resEntered=False
 		prompt='Enter a fact to validate:\n'
 		prompt=prompt+'Enter ; if done\n'
-		fact = raw_input(prompt)
+		fact = input(prompt)
 		if ';' in fact:
 			done=True
 			break
@@ -183,7 +178,7 @@ def validateNewFact():
 		if subject: 
 			if '[[' not in str(splitfact) and ']]' not in str(splitfact) and '>>' not in str(splitfact) and '#' not in str(splitfact):
 				#rest of the fact (excluding subject) is a relation
-				if type in typeDict.keys(): #add relations only when subject is of valid type
+				if type in list(typeDict.keys()): #add relations only when subject is of valid type
 					relation=''
 					for tk in splitfact:
 						if not str(tk)==subject:
@@ -206,10 +201,10 @@ def validateNewFact():
 							typeDict[type]['entity'][subject]['relations'].append(relation)
 							
 						#if num: add value
-					print 'Relations for '+subject+': '
-					print typeDict[type]['entity'][subject]['relations']
-					print 'Parameters for '+subject+': '
-					print typeDict[type]['entity'][subject]['parameters']	
+					print('Relations for '+subject+': ')
+					print(typeDict[type]['entity'][subject]['relations'])
+					print('Parameters for '+subject+': ')
+					print(typeDict[type]['entity'][subject]['parameters'])	
 	
 		for elem in splitfact:
 			if elem.startswith('['):
@@ -235,14 +230,14 @@ def validateNewFact():
 			if type not in typeDict:
 				typInFact=False
 		if subEntered:
-			if subject not in typeDict[type]['entity'].keys():
+			if subject not in list(typeDict[type]['entity'].keys()):
 				#if subject not in typeDict, ask whether it satisfies type restrictions
 				if typeDict[type]['restriction']:
 					for rel in typeDict[type]['restriction']:
 						qual= subject+' '+rel+'? (y/n)'
-						ans = raw_input(qual)
+						ans = input(qual)
 						if not(ans == 'y') and not(ans == 'yes'):
-							print 'not y'
+							print('not y')
 							entInFact=False
 				else:
 					entInFact=False
@@ -252,7 +247,7 @@ def validateNewFact():
 					typeDict[type]['entity'][subject]['parameters']={}
 					typeDict[type]['entity'][subject]['alias']=[]
 					updateDict()
-					print typeDict
+					print(typeDict)
 				
 		if parEntered:
 			if parent not in typeDict[type]['parent']:
@@ -262,16 +257,16 @@ def validateNewFact():
 				resInFact=False
 	
 		if entInFact and typInFact and parInFact and resInFact and relationValid:
-			print fact + ':validated'
+			print(fact + ':validated')
 			continue
 		else:
-			print fact + ':not validated'
+			print(fact + ':not validated')
 			continue
 
 
 readVocab()
 updateDict()
 collectRelations()
-print 'Type Info in Vocab:'
-print typeDict
+print('Type Info in Vocab:')
+print(typeDict)
 validateNewFact()
