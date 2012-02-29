@@ -61,9 +61,9 @@ def create_fx( ):
 
 def main():
     global ctagf, utagf
-    factd  = '/'
+    factd  = ''
     factv  = 'photo.v'
-    factf  = '_wikidata_.f'
+    factf  = 'test.f'
     factfx = 'photo.fx'
         
     # Process command line options
