@@ -32,26 +32,26 @@ utagf   = false
 #-------------------------------------------
 
 def usage():
-    print("")
-    print("mkvocab [options] file")
-    print("will open file.f in the same directory as file.")
-    print("If file.v is newer than file.f and then the program")
-    print("issues a warning and does nothing.")
-    print("")
-    print("Options:")
-    print("--help  Help -- provides this summary.")
-    print("-h      Help -- provides this summary.")
-    print("-v      Make vocabulary, default is to list vocabulary as output")
-    print("-u      Vocabulary has unique names for productions")
-    print("-c      Vocabulary has constructed names for productions")
-    print("-q      No std-output produced.")
-    return
+	print("")
+	print("mkvocab [options] file")
+	print("will open file.f in the same directory as file.")
+	print("If file.v is newer than file.f and then the program")
+	print("issues a warning and does nothing.")
+	print("")
+	print("Options:")
+	print("--help  Help -- provides this summary.")
+	print("-h      Help -- provides this summary.")
+	print("-v      Make vocabulary, default is to list vocabulary as output")
+	print("-u      Vocabulary has unique names for productions")
+	print("-c      Vocabulary has constructed names for productions")
+	print("-q      No std-output produced.")
+	return
 
 #----------------------------------------------------------
 
 def create_fx( ):
 
-    return
+	return
 
 
 #----------------------------------------------------------
@@ -60,118 +60,118 @@ def create_fx( ):
 
 
 def main():
-    global ctagf, utagf
-    factd  = ''
-    factv  = 'photo.v'
-    factf  = 'test.f'
-    factfx = 'photo.fx'
+	global ctagf, utagf
+	factd  = '/'
+	factv  = 'photo.v'
+	factf  = '_wikidata_.f'
+	factfx = 'photo.fx'
         
     # Process command line options
 
-    try:
-        opts, args = getopt(sys.argv[1:], "hvVqf:v:uc",\
-                ["help", "facts=", "vocab="])
-    except GetoptError as err:
+	try:
+		opts, args = getopt(sys.argv[1:], "hvVqf:v:uc",\
+			["help", "facts=", "vocab="])
+	except GetoptError as err:
         # print help information and exit:
-        print(str(err)) # will print something like "option -a not recognized"
-        usage()
-        sys.exit(2)
+		print((str(err))) # will print something like "option -a not recognized"
+		usage()
+		sys.exit(2)
 
-    for o, a in opts:
-        if   o == "-q": verbose = false
-        elif o == "-v": verbose = true
-        elif o == "-V": verbose = false
-        elif o == "-c": ctagf = true
-        elif o == "-u": utagf = true
-        elif o in ("-f", "--facts"):
-            factbase = a
-            if a:
-                logdir = "./"
-            else:
-                (logdir,factn) = os.path.split(a)
-                factf = factn + ".f"
-                factv = factn + ".v"
-                factfx = factn + ".fx"
-        elif o in ("-h", "--help"):
-            usage()
-            sys.exit()
-        else: assert False, "unhandled option"
+	for o, a in opts:
+		if   o == "-q": verbose = false
+		elif o == "-v": verbose = true
+		elif o == "-V": verbose = false
+		elif o == "-c": ctagf = true
+		elif o == "-u": utagf = true
+		elif o in ("-f", "--facts"):
+			factbase = a
+			if a:
+				logdir = "./"
+			else:
+				(logdir,factn) = os.path.split(a)
+				factf = factn + ".f"
+				factv = factn + ".v"
+				factfx = factn + ".fx"
+		elif o in ("-h", "--help"):
+			usage()
+			sys.exit()
+		else: assert False, "unhandled option"
 
-    text  = []
-    stats = {}
+	text  = []
+	stats = {}
  
 
     
-    if os.path.exists( factd + factfx ):
+	if os.path.exists( factd + factfx ):
         # check to see if it is newer than the input files
         # exit if it is.
-        pass
+		pass
 
     #  Pass 1 -- Read the fact file and put facts into entities directory.
     
-    factfile = open( factd + factf, 'rb' ) #file( factd + factf, 'r' )
-    ent.build_entities( factfile )
-    factfile.close
+	factfile = open( factd + factf, 'rb' ) #file( factd + factf, 'r' )
+	ent.build_entities( factfile )
+	factfile.close
     
-    ent.show_all()
+	ent.show_all()
     
     # Pass 2 -- build up information about types
-    typ.establish_types( ent.entities )
-    print("\nTypes and their Entities\n")
-    typ.show_all_entities()
+	typ.establish_types( ent.entities )
+	print("\nTypes and their Entities\n")
+	typ.show_all_entities()
 
     # Pass 3 -- break predicates into objects, relations, and values.
 
-    for et in ent.entities:
-        for item in ent.entities[et]:
-            it = item[0]
-            if it == 'F':
-                rel.set_relations( item[4] )
+	for et in ent.entities:
+		for item in ent.entities[et]:
+			it = item[0]
+			if it == 'F':
+				rel.set_relations( item[4] )
 
     # Report Relation information
     
-    print('\nAbstract Relations:')
-    print('')
+	print('\nAbstract Relations:')
+	print('')
     
-    rel.show()  
+	rel.show()  
     
-    rel.show_keys()
+	rel.show_keys()
     
-    rel.show_names()
+	rel.show_names()
     
     # Pass 4 -- Collapse Relations
     
     # Pass 5 -- Generate Vocabulary
     
     # print rtags
-    r_tags = list(rel.rel_tags.keys())
-    r_tags.sort( key=str.lower )
+	r_tags = list(rel.rel_tags.keys())
+	r_tags.sort( key=str.lower )
     
-    print("\nPossible Vocabulary:\n")
-    vfmt = '%-10s %s'
+	print("\nPossible Vocabulary:\n")
+	vfmt = '%-10s %s'
     
-    for tn in typ.types:
-        print(vfmt % (tn, "[]"))
+	for tn in typ.types:
+		print((vfmt % (tn, "[]")))
         
-    print('')
-    vfmt = '%-3s %s'
-    for name in r_tags:         
-        vlist = rel.get_v_rule( name )  # returns ( name, [ [.vocab-rule1], [.....vocab-rule2], ...]
+	print('')
+	vfmt = '%-3s %s'
+	for name in r_tags:         
+		vlist = rel.get_v_rule( name )  # returns ( name, [ [.vocab-rule1], [.....vocab-rule2], ...]
         # print "list of rule names:", `vlist`
-        rv = vlist[1][0]
+		rv = vlist[1][0]
         # print "first rule:", `rv`
-        if ctagf:
-            print(vfmt % (vlist[0], lex.unlex(rv)))
-        elif utagf:
-            print(vfmt % (g.unique_name(), lex.unlex(rv)))
-        else: # use * for first rule and " for subsequent ones
-            print(vfmt % ("*", lex.unlex(rv)))
-        for rv in vlist[1][1:]:
-            print(vfmt % ('"', lex.unlex(rv)))
+		if ctagf:
+			print((vfmt % (vlist[0], lex.unlex(rv))))
+		elif utagf:
+			print((vfmt % (g.unique_name(), lex.unlex(rv))))
+		else: # use * for first rule and " for subsequent ones
+			print((vfmt % ("*", lex.unlex(rv))))
+		for rv in vlist[1][1:]:
+			print((vfmt % ('"', lex.unlex(rv))))
 
-    return
+	return
 
-    sys.exit(0)
+	sys.exit(0)
 
 if __name__ == "__main__":
-    main()
+	main()
