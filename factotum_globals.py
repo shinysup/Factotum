@@ -14,14 +14,14 @@ class GlobalClass:
 
 #----------------------------------------------------------
 
-def __init__(self,parent=None):
-	self.parent = parent
-	return
+	def __init__(self,parent=None):
+		self.parent = parent
+		return
         
 #----------------------------------------------------------
 
-def unique_name( self ):
-	self.unique_num += 1
-	return( '$$' + ( '%08d' % self.unique_num ) )
+	def unique_name( self ):
+		self.unique_num += 1
+		return( '$$' + ( '%08d' % self.unique_num ) )
     
 #----------------------------------------------------------

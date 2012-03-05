@@ -109,7 +109,7 @@ def main():
 
     #  Pass 1 -- Read the fact file and put facts into entities directory.
     
-	factfile = open( factd + factf, 'rb' ) #file( factd + factf, 'r' )
+	factfile = open( factf, 'rb' ) #file( factd + factf, 'r' )
 	ent.build_entities( factfile )
 	factfile.close
     
