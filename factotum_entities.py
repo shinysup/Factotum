@@ -80,13 +80,14 @@ class EntityClass:
 				next_line=''
 				next_line=factf.readline()
 				continue
-
+			
+			afact=str(afact)
 			print('Current Fact: ' + afact)
-			if strip(afact) == "":
-				continue
+		#	if strip(afact) == "":
+		#		continue
 
 			(m,s,p,px,r,c)=lex.breakup_fact(afact)
-			p=strip(p)
+			p=p.strip()
 
 			if s[0:2]=="\<":
 				se=find(p,'>')
