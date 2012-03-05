@@ -117,7 +117,7 @@ class RelationsClass:
         # and we can forget it since it is already a recorded relation.
         # So at this point we have a new vtag, vlist pattern
 
-		cname = replace( vtag, ' ', '')
+		cname = vtag.replace( ' ', '')
 
         # create the low-level relation vocabulary
         
@@ -211,10 +211,10 @@ class RelationsClass:
 			iw += 1
                                                    
 		vtag = lex.unlex( vlist )
-		vtag = replace( vtag, '<>', ' ' )
-		vtag = replace( vtag, '()', ' ' )
-		vtag_list = split(vtag)
-		vtag = join(vtag_list)
+		vtag = vtag.replace('<>', ' ' )
+		vtag = vtag.replace('()', ' ' )
+		vtag_list = vtag.split()
+		vtag = ''.join(vtag_list)
        	# print "vtag is", vtag
 		self.enter_syntax( vtag, vlist )
             

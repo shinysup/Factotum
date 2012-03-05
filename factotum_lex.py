@@ -166,9 +166,9 @@ class LexFacts:
 				if dc:
 					token+=n;
 					cp+=1
-		if depth!=0:
-			raise LexException("Unbalanced grouping -- %s not found.\n in %s" %\
-				(esym,p))
+		#if depth!=0:
+		#	raise LexException("Unbalanced grouping -- %s not found.\n in %s" %\
+		#		(esym,p))
 		tokens.append((token,ttype))
 		return tokens
 
