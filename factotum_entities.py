@@ -3,11 +3,12 @@ true = 1
 from string import *
 import factotum_lex
 import factotum_globals
+import fact
 lex = factotum_lex.LexFacts()
 g = factotum_globals.GlobalClass()
 
 class EntityClass:
-	entities = {}
+	entities = fact.entities
 
 	def __init__(self,parent=None):
 		self.parent = parent
@@ -90,7 +91,7 @@ class EntityClass:
 			p=p.strip()
 
 			if s[0:2]=="\<":
-				se=find(p,'>')
+				se=p.find('>')
 				if se > 0:
 					a=s[2:]+' '+p[:se-1]
 					p=strip(p[se:])
@@ -107,9 +108,9 @@ class EntityClass:
 					s=strip(p[2:])
 					self.alias(m,a,s,[],r,c)
 				elif p[:1] == '[':
-					te=find(p,']')
+					te=p.find(']')
 					if te > 0:
-						t=strip(p[1:te])
+						t=p.strip(p[1:te])
 					else:
 						print('Warning: Type has no ending ]\nin ',p)
 						t=strip(p[1:])

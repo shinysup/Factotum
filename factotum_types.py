@@ -4,15 +4,18 @@
 false = 0
 true  = 1
 from string import *
+import fact
+import model
 
 # This module handles type information about entities
+
 
 class TypesClass:
 
     # Establish type information
 
-                  
-	types = {}    # Dict info about organization and uses of types
+	types = model.typesClass() 
+	#types = {}    # Dict info about organization and uses of types
                   # ent: list of entities of this type
                   # rel: list of relations used for this type
                   # res: list of restrictions to apply to this type
@@ -31,17 +34,22 @@ class TypesClass:
 
 	def set_type_info( self, t, field, val):
 		lists = ( 'ent', 're', 'res', 'sib', 'rem' )
-		if t not in self.types:
-       			self.types[t] = {}          # create a named type dict in the types dict
-       			self.types[t]['ent'] = []   # entities that belong to this type
-        		self.types[t]['rel'] = []   # relations used in entities of this type
-        		self.types[t]['res'] = []   # restriction applied to this type
-        		self.types[t]['par'] = ''   # It's a tree only one father
-        		self.types[t]['sib'] = []   # It's a tree multiple sons
-        		self.types[t]['div'] = []   # It's an object divided into independent parts
-        		self.types[t]['rem'] = []   # Remarks about this type (informal def.)
+		if t not in self.types.return_keys():
+			self.types.init_type(t)
+       			#self.types[t] = {}          # create a named type dict in the types dict
+       			#self.types[t]['ent'] = []   # entities that belong to this type
+        		#self.types[t]['rel'] = []   # relations used in entities of this type
+        		#self.types[t]['res'] = []   # restriction applied to this type
+        		#self.types[t]['par'] = ''   # It's a tree only one father
+        		#self.types[t]['sib'] = []   # It's a tree multiple sons
+        		#self.types[t]['div'] = []   # It's an object divided into independent parts
+        		#self.types[t]['rem'] = []   # Remarks about this type (informal def.)
 		if field in lists:
-        		self.types[t][field].append( val )
+			if field=='res':
+				self.types.add_restriction(t,val)
+			elif field=='par':
+				self.types.set_parent(t,val)
+        		#self.types[t][field].append( val )
 		elif field == 'par':
 			if   self.types[t]['par'] == val: return
 			elif self.types[t]['par'] == []:  self.types[t]['par'] = val
@@ -114,7 +122,7 @@ class TypesClass:
 #----------------------------------------------------------
 
 	def show_all( self ):   #  Print all collected information about all types
-		tlist = list(self.types.keys())
+		tlist = list(self.types.return_keys())
 		tlist.sort(key=str.lower)
 		for typ in tlist:
 			self.show( typ )
@@ -126,29 +134,30 @@ class TypesClass:
      
     # Report type information
 
-		tlist = list(self.types.keys())
+		tlist = list(self.types.return_keys())
 		tlist.sort(key=str.lower)
+		lists = ( 'ent', 're', 'res', 'sib', 'rem' )	
 
 		for t in tlist:
 			print('')
 			print('t: ' + t)
-			for et in self.types[t]:
+			for et in lists:
 				if et == 'par': continue
-				elif et == 'ent':                
-					print('Entities:', end=' ')
-					itlist = self.types[t]['ent'] # get entity names
-					itlist.sort()            # sort entity names
-					n = 0
-					for it in itlist[:-1]:   # format lines
-						if n != 0 and (n % 5) == 0: print("\n      ", end=' ')
-						print(it + ", ", end=' ')
-						n += 1
-					if len(itlist):                     
-                    				print(itlist[-1])           # print last one with new-line
+				#elif et == 'ent':                
+				#	print('Entities:', end=' ')
+				#	itlist = self.types[t]['ent'] # get entity names
+				#	itlist.sort()            # sort entity names
+				#	n = 0
+				#	for it in itlist[:-1]:   # format lines
+				#		if n != 0 and (n % 5) == 0: print("\n      ", end=' ')
+				#		print(it + ", ", end=' ')
+				#		n += 1
+				#	if len(itlist):                     
+                    		#		print(itlist[-1])           # print last one with new-line
                     
                     
-				else:
-					if self.types[t][et] != []:
-						print("    " + et, repr(self.types[t][et]))
+				elif et == 'res':
+					if self.types.get_value(t,'Restrictions') != []:
+						print("    " + et, repr(self.types[t]['Restrictions']))
                         
 		return

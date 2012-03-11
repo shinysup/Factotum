@@ -109,7 +109,7 @@ def main():
 
     #  Pass 1 -- Read the fact file and put facts into entities directory.
     
-	factfile = open( factf, 'rb' ) #file( factd + factf, 'r' )
+	factfile = open( factf, 'r', encoding='utf-8' ) #file( factd + factf, 'r' )
 	ent.build_entities( factfile )
 	factfile.close
     
@@ -150,7 +150,7 @@ def main():
 	print("\nPossible Vocabulary:\n")
 	vfmt = '%-10s %s'
     
-	for tn in typ.types:
+	for tn in typ.types.return_keys():
 		print((vfmt % (tn, "[]")))
         
 	print('')
@@ -158,16 +158,16 @@ def main():
 	for name in r_tags:         
 		vlist = rel.get_v_rule( name )  # returns ( name, [ [.vocab-rule1], [.....vocab-rule2], ...]
         # print "list of rule names:", `vlist`
-		rv = vlist[1][0]
+		#rv = vlist[1][0]
         # print "first rule:", `rv`
-		if ctagf:
-			print((vfmt % (vlist[0], lex.unlex(rv))))
-		elif utagf:
-			print((vfmt % (g.unique_name(), lex.unlex(rv))))
-		else: # use * for first rule and " for subsequent ones
-			print((vfmt % ("*", lex.unlex(rv))))
-		for rv in vlist[1][1:]:
-			print((vfmt % ('"', lex.unlex(rv))))
+		#if ctagf:
+		#	print((vfmt % (vlist[0], lex.unlex(rv))))
+		#elif utagf:
+		#	print((vfmt % (g.unique_name(), lex.unlex(rv))))
+		#else: # use * for first rule and " for subsequent ones
+		#	print((vfmt % ("*", lex.unlex(rv))))
+		#for rv in vlist[1][1:]:
+		#	print((vfmt % ('"', lex.unlex(rv))))
 
 	return
 

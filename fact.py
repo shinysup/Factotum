@@ -1,8 +1,10 @@
-import os, sys, time, glob
-from string import *
+
 import model
 
 entities = {} #global
+types = model.typesClass()
+relations = model.relationsClass()
+parameters = model.parametersClass()
 
 def init_entity(ename):
 	entities[ename]={}
@@ -20,7 +22,7 @@ def add_param(ename,pname,val):
 		if pname=='Alias':
 			entities[ename]['Alias'].append(val)
 		elif pname=='Types':
-			if val in model.types.keys():
+			if val in types.return_keys():
 				entities[ename]['Types'].append(val)
 			else:
 				print('type not defined')
@@ -88,26 +90,28 @@ def show_all():
 	print(entities)
 
 def init_relation(ename,rel):
-	if rel in model.relations.keys(): 
+	if rel in relations.return_keys(): 
 		entities[ename]['Relations'][rel]={}
-		entities[ename]['Relations'][rel]['Name']= model.relations[rel]['Name'] #describes the relation.
-		entities[ename]['Relations'][rel]['Format']= model.relations[rel]['Format'] #desired output format
-		entities[ename]['Relations'][rel]['Object']=model.relations[rel]['Object'] #list of types
-		entities[ename]['Relations'][rel]['Pattern']=model.relations[rel]['Pattern']  #pattern of input distinguished by marker
+		entities[ename]['Relations'][rel]['Name']= relations[rel]['Name'] #describes the relation.
+		entities[ename]['Relations'][rel]['Format']= relations[rel]['Format'] #desired output format
+		entities[ename]['Relations'][rel]['Object']=relations[rel]['Object'] #list of types
+		entities[ename]['Relations'][rel]['Pattern']=relations[rel]['Pattern']  #pattern of input distinguished by marker
 	else:
 		print('relation not defined')	
 
 def init_parameter(ename,param):
-	entities[ename]['Parameters'][param]={}
-	entities[ename]['Parameters'][param]['Value']=''
-	entities[ename]['Parameters'][param]['Unit']=''
-	entities[ename]['Parameters'][param]['Name']=''
-
+	if param in parameters.return_keys():
+		entities[ename]['Parameters'][param]={}
+		entities[ename]['Parameters'][param]['Value']=parameters[param]['Value']
+		entities[ename]['Parameters'][param]['Unit']=parameters[param]['Unit']
+		entities[ename]['Parameters'][param]['Name']=parameters[param]['Name']
+	else:
+		print('parameter not defined')
 
 #e = input()
 #init_entity(e)
 #f = input()
-#add_param(e,'Relations',f)
+#add_param(e,'Types',f)
 #show_all()
 #g = get_value(e,'Alias')
 #print(g)

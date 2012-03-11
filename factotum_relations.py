@@ -7,6 +7,7 @@ from string import *
 import factotum_lex
 import factotum_entities
 import factotum_globals
+import model
 lex = factotum_lex.LexFacts()
 e   = factotum_entities.EntityClass()
 g   = factotum_globals.GlobalClass()
@@ -17,7 +18,7 @@ g   = factotum_globals.GlobalClass()
 class RelationsClass:
 
 
-	relations = {}    # info about predicate relations syntax and semantics
+	relations = model.relationsClass()    # info about predicate relations syntax and semantics
                       # Dict of relations where each is a list of tuples"
                       # The key is always an unique_name and the contents
                       # are always a unique parse pattern.
@@ -109,7 +110,7 @@ class RelationsClass:
 
 		if vtag in self.rel_keys:
 			for r in self.rel_keys[vtag]: # We are looking for an exact relation match
-				if vlist == self.relations[r][1]:
+				#if vlist == self.relations[r][1]:
 					found = true
 					return
             
@@ -122,7 +123,9 @@ class RelationsClass:
         # create the low-level relation vocabulary
         
 		s = g.unique_name()
-		self.relations[s] = ( cname, vlist )
+		self.relations.init_relation(s)
+		#self.relations[s] = ( cname, vlist )
+		
 
         # Enter the key in rel_keys as a pattern or alternative pattern:
         # ... exact matches disappered in the search loop.
@@ -230,8 +233,8 @@ class RelationsClass:
 		vtlist = self.rel_tags[name]
         # print "vocab tag list:", `vtlist`
 		vlist = (name,[])
-		for vt in vtlist:
-			vlist[1].append( self.relations[vt][1] )
+		#for vt in vtlist:
+		#	vlist[1].append( self.relations[vt][1] )
         # print "vocab list:", `vlist`
 		return vlist
 
@@ -240,16 +243,16 @@ class RelationsClass:
 	def show( self ):
     # Display information about general relations
 
-		r_tags = list(self.relations.keys())
+		r_tags = list(self.relations.return_keys())
 		r_tags.sort()
  
 		print("\nRelations Table:")
 		print('')
-		for rt in r_tags:
-			if len( self.relations[rt][1] ) > 5:
-				print("   ", rt, self.relations[rt][0], lex.unlex(self.relations[rt][1][:5]), "...")
-			else:
-				print("   ", rt, self.relations[rt][0], lex.unlex(self.relations[rt][1]))
+		#for rt in r_tags:
+		#	if len( self.relations[rt][1] ) > 5:
+		#		print("   ", rt, self.relations[rt][0], lex.unlex(self.relations[rt][1][:5]), "...")
+		#	else:
+		#		print("   ", rt, self.relations[rt][0], lex.unlex(self.relations[rt][1]))
 		return
        
 #-----------------------------------------------------------------------------------------------------
@@ -264,13 +267,13 @@ class RelationsClass:
 		for rk in r_keys:
 			label = rk
 			for i in self.rel_keys[rk]:
-				x, rv = self.relations[i]       
+				#x, rv = self.relations[i]       
 				if len(label) > 15:
 					print("    " + label, "-->")
-					print("        " + lex.unlex(rv))
+					#print("        " + lex.unlex(rv))
 			else:
 				print("    %-15s" % (label,), end=' ')
-				print("-->", lex.unlex(rv))
+				#print("-->", lex.unlex(rv))
 			label = ""
 		return
 
@@ -282,14 +285,14 @@ class RelationsClass:
 
 		print("\nRelation Tag Table:")
 		print('')
-		for rtg in r_tags:
-			rn, rv = self.relations[ self.rel_tags[rtg][0] ]
-			if len(rn) > 15:
-				print("    " + rn, "-->")
-				print("        " + lex.unlex(rv))
-			else:
-				print("    %-15s" % (rn,), end=' ')
-				print("-->", lex.unlex(rv))
+		#for rtg in r_tags:
+			#rn, rv = self.relations[ self.rel_tags[rtg][0] ]
+			#if len(rn) > 15:
+			#	print("    " + rn, "-->")
+			#	print("        " + lex.unlex(rv))
+			#else:
+			#	print("    %-15s" % (rn,), end=' ')
+			#	print("-->", lex.unlex(rv))
 		return
 
 #-------------------------------------------

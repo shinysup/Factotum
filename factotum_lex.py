@@ -26,10 +26,10 @@ class LexFacts:
 		mlen = len(m)
 		if m=="*" or m==':*' or m=='#*':
 			s=g.unique_name()
-			f=f[meln:]
+			f=f[mlen:]
 		elif m=='"' or m==':"' or m=='#' or m=='#"' or m==':[':
 			s=g.current_subject
-			f=f[meln:]
+			f=f[mlen:]
 		elif m==':<':
 			s='\\include'
 			f=f[mlen:]
