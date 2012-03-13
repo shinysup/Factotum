@@ -27,7 +27,7 @@ def add_param(ename,pname,val):
 			else:
 				print('type not defined')
 		elif pname=='Relations':
-			init_relation(ename,val)
+				relations.init_relation(ename,val)
 		elif pname=='Parameters':
 			init_parameter(ename,val)
 		elif pname=='Name':
@@ -50,8 +50,10 @@ def modify_param(ename,pname,oval,nval):
 			else:
 				entities[ename][pname].remove(oval)
 				entities[ename][pname].append(nval)
-		elif pname=='Relations' or pname=='Parameters':
-			print('dummy') #edit later
+		elif pname=='Relations':
+			relationsinit_relation(nval)
+		elif pname=='Parameters':
+			relations.init_parameter(nval)	
 		elif pname=='Name':
 			if oval != entities[ename]['Name']:
 				print(oval + 'is not the current name')
@@ -89,6 +91,9 @@ def get_value(ename,pname):
 def show_all():
 	print(entities)
 
+def return_keys():
+	return entities.keys()
+
 def init_relation(ename,rel):
 	if rel in relations.return_keys(): 
 		entities[ename]['Relations'][rel]={}
@@ -108,13 +113,15 @@ def init_parameter(ename,param):
 	else:
 		print('parameter not defined')
 
-#e = input()
-#init_entity(e)
-#f = input()
-#add_param(e,'Types',f)
+e = 'testEnt'
+init_entity(e)
+f = 'testTyp'
+add_param(e,'Types',f)
 #show_all()
-#g = get_value(e,'Alias')
+g = get_value(e,'Alias')
 #print(g)
-#g = input()
-#modify_param(e,'Types',f,g)
+h = 'newTyp'
+modify_param(e,'Types',f,h)
 #print(entities)
+show_all()
+return_keys()

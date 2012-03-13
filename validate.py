@@ -1,12 +1,19 @@
 import os, sys, time, glob
 from getopt import *
 from string import *
+import fact
+import model
 
 curType=''
-typeDict = {}
+typeDict = model.types
+relations = model.relations
+parameters = model.parameters
+entities = fact.entities
 subject=''
 type=''
 
+
+'''
 def readVocab(): #read __.v file and put them in typeDict
 	typeLine = 'Type is'
 	entityStart = 'Entities:'
@@ -107,11 +114,11 @@ def collectRelations():
 			temp=line.split()
 			temp=str(temp[2])
 			currentTyp=temp
-
+'''
 def updateDict():#update new entity information for its type parents 
 	for t in typeDict:
-		if typeDict[t]['parent']:
-			par = typeDict[t]['parent']
+		if typeDict[t]['Parent']:
+			par = typeDict[t]['Parent']
 			for e in typeDict[t]['entity']:
 				if e not in typeDict[par]['entity']:
 					typeDict[par]['entity'][e]={}
@@ -119,10 +126,12 @@ def updateDict():#update new entity information for its type parents
 					typeDict[par]['entity'][e]['parameters']={}
 					typeDict[par]['entity'][e]['alias']=[]
 
-def getTypeOf(ent): #return type of entity
-	for t in typeDict:
-		if ent in typeDict[t]['entity']:
-			return t
+def getTypeOf(ent): #return type of entity (one from the list)
+	tl=[]
+	for t in entities[ent]['Types']:
+		if t in typeDict.return_keys():
+			tl.append(t)
+	return tl
 
 def hasNumeric(r):
 	l=list(r)
@@ -178,33 +187,33 @@ def validateNewFact():
 		if subject: 
 			if '[[' not in str(splitfact) and ']]' not in str(splitfact) and '>>' not in str(splitfact) and '#' not in str(splitfact):
 				#rest of the fact (excluding subject) is a relation
-				if type in list(typeDict.keys()): #add relations only when subject is of valid type
+				if type in list(typeDict.return_keys()): #add relations only when subject is of valid type
 					relation=''
 					for tk in splitfact:
 						if not str(tk)==subject:
 							relation = relation+str(tk)
 					relation = ''.join(c for c in relation if c.isalnum())
 					num=''
-					if relation not in typeDict[type]['entity'][subject]['relations']:
+					if relation not in entities[subject]['Relations']:
 						if hasNumeric(relation): #parameters with values
 							nums = returnNumeric(relation)
 							parameter = relation
 							for n in nums:
 								parameter = parameter.replace(n,'()')
-							if parameter not in typeDict[type]['entity'][subject]['parameters']:
+							if parameter not in parameters.return_keys():
 								#if parameter is not in dictionary, add it as a validated parameter
-								typeDict[type]['entity'][subject]['parameters'][parameter]=nums
-							elif not nums == typeDict[type]['entity'][subject]['parameters'][parameter]:
+								entities[subject]['Parameters'][parameter]=nums
+							elif not nums == parameters[parameter]:
 								#parameter values do not match
 								relationValid = False
 						else: #relation and attribute
-							typeDict[type]['entity'][subject]['relations'].append(relation)
+							entities[subject]['Relations'].append(relation)
 							
 						#if num: add value
-					print('Relations for '+subject+': ')
-					print(typeDict[type]['entity'][subject]['relations'])
-					print('Parameters for '+subject+': ')
-					print(typeDict[type]['entity'][subject]['parameters'])	
+					#print('Relations for '+subject+': ')
+					#print(typeDict[type]['entity'][subject]['relations'])
+					#print('Parameters for '+subject+': ')
+					#print(typeDict[type]['entity'][subject]['parameters'])	
 	
 		for elem in splitfact:
 			if elem.startswith('['):
@@ -230,10 +239,10 @@ def validateNewFact():
 			if type not in typeDict:
 				typInFact=False
 		if subEntered:
-			if subject not in list(typeDict[type]['entity'].keys()):
+			if subject not in entities.return_keys():
 				#if subject not in typeDict, ask whether it satisfies type restrictions
-				if typeDict[type]['restriction']:
-					for rel in typeDict[type]['restriction']:
+				if typeDict[type]['Restriction']:
+					for rel in typeDict[type]['Restriction']:
 						qual= subject+' '+rel+'? (y/n)'
 						ans = input(qual)
 						if not(ans == 'y') and not(ans == 'yes'):
@@ -242,18 +251,18 @@ def validateNewFact():
 				else:
 					entInFact=False
 				if entInFact:
-					typeDict[type]['entity'][subject]={}
-					typeDict[type]['entity'][subject]['relations']=[]
-					typeDict[type]['entity'][subject]['parameters']={}
-					typeDict[type]['entity'][subject]['alias']=[]
+					entities[subject]['Name']={}
+					entities[subject]['Relations']=[]
+					entities[subject]['Parameters']={}
+					entities[subject]['Alias']=[]
 					updateDict()
 					print(typeDict)
 				
 		if parEntered:
-			if parent not in typeDict[type]['parent']:
+			if parent not in typeDict[type]['Parent']:
 				parInFact=False
 		if resEntered:
-			if restriction not in typeDict[type]['restriction']:
+			if restriction not in typeDict[type]['Restriction']:
 				resInFact=False
 	
 		if entInFact and typInFact and parInFact and resInFact and relationValid:
@@ -264,9 +273,9 @@ def validateNewFact():
 			continue
 
 
-readVocab()
-updateDict()
-collectRelations()
+#readVocab()
+#updateDict()
+#collectRelations()
 print('Type Info in Vocab:')
 print(typeDict)
 validateNewFact()
