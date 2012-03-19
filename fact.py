@@ -5,6 +5,7 @@ entities = {} #global
 types = model.typesClass()
 relations = model.relationsClass()
 parameters = model.parametersClass()
+patterns = model.patterns
 
 def init_entity(ename):
 	entities[ename]={}
@@ -100,7 +101,6 @@ def init_relation(ename,rel):
 		entities[ename]['Relations'][rel]['Name']= relations[rel]['Name'] #describes the relation.
 		entities[ename]['Relations'][rel]['Format']= relations[rel]['Format'] #desired output format
 		entities[ename]['Relations'][rel]['Object']=relations[rel]['Object'] #list of types
-		entities[ename]['Relations'][rel]['Pattern']=relations[rel]['Pattern']  #pattern of input distinguished by marker
 	else:
 		print('relation not defined')	
 

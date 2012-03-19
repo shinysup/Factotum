@@ -177,11 +177,11 @@ class LexFacts:
 		return s
 
 	def unlex(self,lex):
-		str=''
-		if len(lex) <= 1:str += lex[0][0]
+		strl=''
+		if len(lex) <= 1:strl += str(lex)
 		else:
-			for i in lex[:-1]:
-				str+=i[0]+' '
-			str+=lex[-1][0]
+			for i in lex:
+				strl+=i[0]+' '
+			strl+=str(lex)
 		return str
 

@@ -213,7 +213,7 @@ class RelationsClass:
             # Advance through the entire predicate building up vlist
 			iw += 1
                                                    
-		vtag = lex.unlex( vlist )
+		vtag = str(lex.unlex( vlist ))
 		vtag = vtag.replace('<>', ' ' )
 		vtag = vtag.replace('()', ' ' )
 		vtag_list = vtag.split()
@@ -248,11 +248,11 @@ class RelationsClass:
  
 		print("\nRelations Table:")
 		print('')
-		#for rt in r_tags:
-		#	if len( self.relations[rt][1] ) > 5:
-		#		print("   ", rt, self.relations[rt][0], lex.unlex(self.relations[rt][1][:5]), "...")
-		#	else:
-		#		print("   ", rt, self.relations[rt][0], lex.unlex(self.relations[rt][1]))
+		for rt in r_tags:
+			if len( self.relations.return_keys() ) > 5:
+				print("   ", rt, self.relations.return_keys(), lex.unlex(self.relations.return_keys()), "...")
+			else:
+				print("   ", rt, self.relations.return_keys(), lex.unlex(self.relations.return_keys()))
 		return
        
 #-----------------------------------------------------------------------------------------------------

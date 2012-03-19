@@ -84,8 +84,8 @@ class EntityClass:
 			
 			afact=str(afact)
 			print('Current Fact: ' + afact)
-		#	if strip(afact) == "":
-		#		continue
+			if afact.strip() == "":
+				continue
 
 			(m,s,p,px,r,c)=lex.breakup_fact(afact)
 			p=p.strip()
@@ -153,22 +153,22 @@ class EntityClass:
 		for i in self.entities[etag]:
 			it=i[0]
 			if it=='T':
-				print(indent2+"Type is",i[3],i[5])
+				print(indent2+"Type is",i[3],i[4])
 			elif it=='R':
-				print(indent2+"Has a Restriction:",i[5])
+				print(indent2+"Has a Restriction:",i[4])
 			elif it=='A':
-				print(indent2+"Alias for",i[3],i[5])
+				print(indent2+"Alias for",i[3],i[4])
 			elif it=='a':
-				print(indent2+"Alias for",i[3],i[5])
-			elif it=='C':
-				print(indent2+"Citations",i[6])
+				print(indent2+"Alias for",i[3],i[4])
+			#elif it=='C':
+			#	print(indent2+"Citations",i[6])
 			elif it=='F':
 				if i[5]:
 					print(indent2,i[3],'#',i[5])
 				else:
 					print(indent2,i[3])
 			else:
-				print(indent2,repr(i))
+				print(indent2,i)
 		print('')
 
 	def show_all(self):

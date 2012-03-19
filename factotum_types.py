@@ -33,7 +33,7 @@ class TypesClass:
 #----------------------------------------------------------
 
 	def set_type_info( self, t, field, val):
-		lists = ( 'ent', 're', 'res', 'sib', 'rem' )
+		lists = ( 'ent', 're', 'res', 'sib', 'rem', 'par' )
 		if t not in self.types.return_keys():
 			self.types.init_type(t)
        			#self.types[t] = {}          # create a named type dict in the types dict
@@ -50,13 +50,13 @@ class TypesClass:
 			elif field=='par':
 				self.types.set_parent(t,val)
         		#self.types[t][field].append( val )
-		elif field == 'par':
-			if   self.types[t]['par'] == val: return
-			elif self.types[t]['par'] == []:  self.types[t]['par'] = val
-			else: 
-				print('replacing previous parent of type %s ( %s ) by %s' %\
-					( t, self.types[t]['par'], val ))
-				self.types[t]['par'] = val        
+		#elif field == 'par':
+			#if   self.types[t]['par'] == val: return
+			#elif self.types[t]['par'] == []:  self.types[t]['par'] = val
+			#else: 
+			#	print('replacing previous parent of type %s ( %s ) by %s' %\
+			#		( t, self.types[t]['par'], val ))
+			#	self.types[t]['par'] = val        
 		return
         
 #---------------------------------------------------------- 
@@ -77,11 +77,11 @@ class TypesClass:
 	  	    #print "item[2] is:", item[2]
                         		self.set_type_info( item[3], 'ent', et )
 				if it == 'R':
-		    			item[3]=str(item[3]).strip('#')
+		    			#item[3]=str(item[3]).strip('#')
 		    			print('Type Restrictions for ' + str(item[2]) + ': ' + item[3])
 		    			self.set_type_info( item[2], 'res', item[3] )
 				if it == 'P':
-		    			item[3]=str(item[3]).strip('>>')
+		    			#item[3]=str(item[3]).strip('>>')
 		    			print('Type ' + str(item[2]) + ' Has Parent: ' + item[3])
 		    			self.set_type_info( item[2], 'par', item[3])
 		return
@@ -136,14 +136,14 @@ class TypesClass:
 
 		tlist = list(self.types.return_keys())
 		tlist.sort(key=str.lower)
-		lists = ( 'ent', 're', 'res', 'sib', 'rem' )	
+		lists = ( 'ent', 're', 'res', 'sib', 'rem', 'par' )	
 
 		for t in tlist:
 			print('')
 			print('t: ' + t)
 			for et in lists:
 				if et == 'par': continue
-				#elif et == 'ent':                
+				#elif et == 'ent':               	# these parts commented out because entities are no longer parameter of type 
 				#	print('Entities:', end=' ')
 				#	itlist = self.types[t]['ent'] # get entity names
 				#	itlist.sort()            # sort entity names
@@ -158,6 +158,6 @@ class TypesClass:
                     
 				elif et == 'res':
 					if self.types.get_value(t,'Restrictions') != []:
-						print("    " + et, repr(self.types[t]['Restrictions']))
+						print("    " + et, self.types.get_value(t,'Restrictions'))
                         
 		return

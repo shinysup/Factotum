@@ -33,12 +33,6 @@ class typesClass:
 		else:
 			types[type]['Restrictions'].remove(res)
 
-	def del_parent(self,type):
-		if type not in types:
-			print('type not defined')
-		else:
-			types[type]['Parent']=''
-
 	def modify_restriction(self,type,ores,nres):
 		#call del_restriction and add_restriction
 		if type not in types:
@@ -46,13 +40,6 @@ class typesClass:
 		else:
 			self.del_restriction(type,ores)
 			self.add_restriction(type,nres)
-
-	def modify_parent(self,type,nptype):
-		if type not in types:
-			print('type not defined')
-		else:
-			self.del_parent(type)
-			self.set_parent(type,nptype)
 
 	def get_value(self,type,param):
 		if type not in types:
@@ -89,22 +76,9 @@ class relationsClass:
 		else:
 			print('relation not defined')
 
-	def del_format(self,rname):
-		if rname in relations.keys():
-			relations[rname]['Format']=''
-		else:
-			print('relation not defined')	
-	
 	def del_object(self,rname,obj):
 		if rname in relations.keys():
 			relations[rname]['Objects'].remove(obj)
-		else:
-			print('relation not defined')
-
-	def modify_format(self,rname,format):
-		if rname in relations.keys():
-			self.del_format(rname)
-			self.set_format(rname,format)
 		else:
 			print('relation not defined')
 
@@ -131,8 +105,18 @@ class relationsClass:
 	def return_keys(self):
 		return relations.keys()
 
-	#def add_patternrname,pat):
+	def set_pattern(rname,pat):
+		if rname in relations.keys():
+			patterns[pat]='R'
+		else:
+			print('relation not defined')
 
+	def del_pattern(rname,pat):
+		if rname in relations.keys():
+			patterns[pat]=''
+		else:
+			print('relation not defined')
+	
 
 class parametersClass:
 	#parameters = {}	
@@ -155,32 +139,6 @@ class parametersClass:
 		else:
 			print('parameter not defined')		
 
-	def del_value(self,pname):
-		if pname in parameters.keys():
-			parameters[pname]['Value']=''
-		else:
-			print('parameter not defined')		
-
-	def del_unit(self,pname):
-		if pname in parameters.keys():
-			parameters[pname]['Unit']=''
-		else:
-			print('parameter not defined')
-
-	def modify_value(self,pname,val):
-		if pname in parameters.keys():
-			self.del_value(pname)
-			self.set_value(pname,val)
-		else:
-			print('parameter not defined')
-
-	def modify_unit(self,pname,unit):
-		if pname in parameters.keys():
-			self.del_unit(pname)
-			self.set_unit(pname,unit)
-		else:
-			print('parameter not defined')
-
 	def get_value(self,pname,param):
 		if pname in parameters.keys():
 			if param=='Name' or param=='Value' or param=='Unit':
@@ -196,8 +154,17 @@ class parametersClass:
 	def return_keys(self):
 		return parameters.keys()
 
-	#def add_pattern(self,pname,pat):
+	def set_pattern(self,pname,pat):
+		if pname in parameters.keys():
+			patterns[pat] = 'P'
+		else:
+			print('parameter not defined')
 
+	def del_pattern(self,pname,pat):
+		if pname in parameters.keys():
+			patterns[pat]=''
+		else:
+			print('parameter not defined')	
 
 #t = parametersClass()
 #e=input()
